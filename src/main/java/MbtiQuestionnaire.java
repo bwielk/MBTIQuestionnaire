@@ -28,7 +28,6 @@ public class MbtiQuestionnaire {
 	private static void runningQuestionnaire(){
 		Scanner in = new Scanner(System.in);
 		for(int i=0; i<=questions.size()-1; i++){
-			System.out.println(String.format( "%s, %s ", i, questionsToBeAnswered ));
 			String currentQuestion = questions.get( i );
 			System.out.println(String.format("\n\nQUESTION %s/%s", questionsToBeAnswered, questions.size()));
 			System.out.println(String.format("I am more likely to:\n\n%s\n\nAnswer Y for 'Yes' or N for 'No' ", currentQuestion));
