@@ -7,20 +7,43 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class MbtiQuestionnaire {
 
 	private static HashMap<MBTIParam, Integer> scores = new HashMap<>();
 	private static HashMap<String, MBTIParam> questionToParam = new HashMap<>();
 	private static List<String> questions = new ArrayList<>();
+	private static int questionsToBeAnswered = 0;
 
 	public static void main( String[] args ) {
 		scoresSetUp();
 		readQuestions();
 		shuffleQuestions();
-		System.out.println(scores);
-		System.out.println(questions);
-		System.out.println(questionToParam);
+		setQuestionsCounter();
+		while(questionsToBeAnswered >= 0){
+			Scanner in = new Scanner(System.in);
+			for(int i=0; i<questions.size(); i++){
+				String currentQuestion = questions.get( i );
+				System.out.println(String.format("I more likely to:\n\n%s\n\nAnswer Y for 'Yes' or N for 'No' ", currentQuestion));
+				String answer = in.nextLine();
+				processAnswer( answer, currentQuestion, in );
+			}
+			in.close();
+		}
+	}
+
+	private static void processAnswer(String answer, String question, Scanner in){
+		MBTIParam p = questionToParam.get( question );
+		if( answer.equalsIgnoreCase("y")){
+			scores.put( p, scores.get( p ) + 1 );
+		}else if( answer.equalsIgnoreCase("n")){
+			scores.put( p, scores.get( p ));
+		}else{
+			System.out.println("Answer Y for 'Yes' or N for 'No'");
+			answer = in.nextLine();
+			processAnswer( answer, question, in );
+		}
 	}
 
 	private static void scoresSetUp(){
@@ -52,5 +75,9 @@ public class MbtiQuestionnaire {
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void setQuestionsCounter(){
+		questionsToBeAnswered = questions.size();
 	}
 }
