@@ -21,16 +21,22 @@ public class MbtiQuestionnaire {
 		readQuestions();
 		shuffleQuestions();
 		setQuestionsCounter();
-		while(questionsToBeAnswered >= 0){
-			Scanner in = new Scanner(System.in);
-			for(int i=0; i<questions.size(); i++){
-				String currentQuestion = questions.get( i );
-				System.out.println(String.format("I more likely to:\n\n%s\n\nAnswer Y for 'Yes' or N for 'No' ", currentQuestion));
-				String answer = in.nextLine();
-				processAnswer( answer, currentQuestion, in );
-			}
-			in.close();
+		runningQuestionnaire();
+		calculateResults();
+	}
+
+	private static void runningQuestionnaire(){
+		Scanner in = new Scanner(System.in);
+		for(int i=0; i<=questions.size()-1; i++){
+			System.out.println(String.format( "%s, %s ", i, questionsToBeAnswered ));
+			String currentQuestion = questions.get( i );
+			System.out.println(String.format("\n\nQUESTION %s/%s", questionsToBeAnswered, questions.size()));
+			System.out.println(String.format("I am more likely to:\n\n%s\n\nAnswer Y for 'Yes' or N for 'No' ", currentQuestion));
+			String answer = in.nextLine();
+			processAnswer( answer, currentQuestion, in );
+			questionsToBeAnswered-=1;
 		}
+		in.close();
 	}
 
 	private static void processAnswer(String answer, String question, Scanner in){
@@ -79,5 +85,25 @@ public class MbtiQuestionnaire {
 
 	private static void setQuestionsCounter(){
 		questionsToBeAnswered = questions.size();
+	}
+
+	private static void calculateResults(){
+		int resultE = scores.get( MBTIParam.E );
+		int resultI = scores.get( MBTIParam.I );
+		int resultS = scores.get( MBTIParam.S );
+		int resultN = scores.get( MBTIParam.N );
+		int resultT = scores.get( MBTIParam.T );
+		int resultF = scores.get( MBTIParam.F );
+		int resultJ = scores.get( MBTIParam.J );
+		int resultP = scores.get( MBTIParam.P );
+		System.out.println(String.format("Source of energy: E => %s and I => %s", resultE, resultI ));
+		System.out.println(String.format("Taking in information: S => %s and N => %s", resultS, resultN));
+		System.out.println(String.format("Decision making: T => %s F => %s", resultT, resultF));
+		System.out.println(String.format("Lifestyle: J => %s P => %s", resultJ, resultP));
+		String resultEI = resultE >= resultI ? "E" : "I";
+		String resultSN = resultS >= resultN ? "S" : "N";
+		String resultTF = resultT >= resultF ? "T" : "F";
+		String resultJP = resultJ >= resultP ? "J" : "P";
+		System.out.println(String.format("\n\nYOUR TYPE: %s%s%s%s", resultEI, resultSN, resultTF, resultJP));
 	}
 }
